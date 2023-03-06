@@ -4,13 +4,15 @@
             <NavigationButton text="Go back" android.systemIcon="ic_menu_back" @tap="home"/>
             <Label text="Задача" class="header"/>
         </ActionBar>
-  
+
         <FlexboxLayout class="flexbox">
-            <TextField v-model="title" />
-            <TextField v-model="description" />
-            <button @tap="change()" text="Изменить" />
-            <button @tap="del()" text="Удалить" />
-            <button @tap="done()" text="Выполнено" />
+            <label text="Название задачи:" class="label__title"></label>
+            <TextView v-model="title" editable="true" class="title"/>
+            <label text="Описание задачи:" class="label__description"></label>
+            <TextView v-model="description" editable="true" class="description"/>
+            <button @tap="change()" text="Изменить" class="button__save"/>
+            <button @tap="del()" text="Удалить" class="button__save"/>
+            <button @tap="done()" text="Выполнено" class="button__save"/>
         </FlexboxLayout>
     </Page>
   </template>
@@ -54,11 +56,11 @@
 
         change(){ // изменить задачу
             this.tasks.forEach(task => { // ищу по айдишнику свою задачу
-                // СДЕЛАТЬ ЗАЩИТУ ОТ ДУРАКА!!!
                 if(task.id == this.id){
-                    if(this.title != task.title && (this.title != "" || this.title.length != 0)){
+                    if(this.title != "" || this.title.length != 0){
                         task.title = this.title;
                     }
+
                     if(this.description == "" || this.description.length == 0 ){
                         this.description == task.description;
                     }
@@ -69,20 +71,31 @@
         },
 
         del() {
-            let newTasks = [];
-            this.tasks.forEach(task => { // ищу по айдишнику свою задачу
-                if(task.id != this.id){
-                    newTasks.push({
-                        id: task.id,
-                        title: task.title,
-                        description: task.description,
-                        date: task.date,
-                        done: task.done,
+            let confirmOptions = {
+                title: "Удаление задачи",
+                message: "Вы точно хотите удалить эту задачу?",
+                okButtonText: "Да",
+                cancelButtonText: "Нет",
+            };
+
+            confirm(confirmOptions).then((result) => {
+                if(result == true){
+                    let newTasks = [];
+                    this.tasks.forEach(task => { // ищу по айдишнику свою задачу
+                        if(task.id != this.id){
+                            newTasks.push({
+                                id: task.id,
+                                title: task.title,
+                                description: task.description,
+                                date: task.date,
+                                done: task.done,
+                            });
+                        }
                     });
+                    this.tasks = newTasks;
+                    this.save();
                 }
             });
-            this.tasks = newTasks;
-            this.save();
         },
 
         done() {
@@ -115,6 +128,13 @@
         background-color: rgb(81, 130, 255);
     }
 
+    page {
+        background-image: url("~/img/background.jpg");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-color: white;
+    }
+
     .header {
         color: white;
         font-size: 26px;
@@ -123,6 +143,39 @@
     .flexbox {
         display: flex;
         flex-direction: column;
+    }
+
+    .title {
+        background-color: white;
+        border-radius: 15px;
+        font-size: 20px;
+        color: black;
+    }
+
+    .description {
+        background-color: white;
+        border-radius: 15px;
+        font-size: 18px;
+        color: black;
+    }
+
+    .label__title {
+        margin-left: 6%;
+        margin-right: 6%;
+        font-size: 24px;
+    }
+
+    .label__description {
+        margin-left: 6%;
+        margin-right: 6%;
+        font-size: 24px;
+    }
+
+    .button__save {
+        border-radius: 100px;
+        background-color: rgba(6, 68, 0, 0.925);
+        font-size: 30px;
+        color: white;
     }
   </style>
   

@@ -81,7 +81,7 @@ import Detail from './Detail.vue';
             ongoing: false, // сможет ли юзер смахнуть уведомление (false - сможет)
             thumbnail: false,
             forceShowWhenInForeground: true,
-            interval: 'minute', // c каким интервалом (каждую минуту)
+            interval: 'day', // c каким интервалом (каждую минуту)
             channel: 'My Channel', // default: 'Channel'
             at: new Date(new Date().getTime()) 
         }
@@ -303,5 +303,6 @@ import Detail from './Detail.vue';
         border-radius: 100px;
         background-color: rgba(6, 68, 0, 0.925);
         font-size: 30px;
+        color: white;
     }
 </style>
